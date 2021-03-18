@@ -9,10 +9,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
-import tensorflow.contrib.slim as slim
-from tensorflow.contrib.slim import losses
-from tensorflow.contrib.slim import arg_scope
+# import tensorflow as tf
+import tensorflow as tf2
+import tensorflow.compat.v1 as tf
+import tf_slim as slim
+from tf_slim import losses
+from tf_slim import arg_scope
 
 import numpy as np
 from time import sleep
@@ -541,6 +543,9 @@ class Network(object):
 
 
   def init_rl_train(self, sess):
+    # Connecting to invalid output 28 of source node while which has 28 outputs
+    tf.disable_eager_execution()
+    tf.experimental.output_all_intermediates(True)
 
     # Return RL-trainable variables (thus skip detector parameters here;
     # they are treated separately).
@@ -757,7 +762,8 @@ class Network(object):
     self._initial_rl_input(net_conv, rpn_cls_prob, rpn_bbox_pred)
 
     # Convolutional GRU
-    self._conv_gru(is_training, tf.contrib.layers.xavier_initializer())
+    # self._conv_gru(is_training, tf.contrib.layers.xavier_initializer())
+    self._conv_gru(is_training, tf2.initializers.GlorotUniform())
 
 
   # Shorter way of writing tf.get_variable(...)
@@ -1125,6 +1131,8 @@ class Network(object):
                           anchor_ratios=(0.5, 1, 2)):
     assert tag != None
 
+    tf.compat.v1.disable_eager_execution()
+
     self._image = tf.placeholder(tf.float32, shape=[1, None, None, 3])
     self._im_info = tf.placeholder(tf.float32, shape=[3])
     self._gt_boxes = tf.placeholder(tf.float32, shape=[None, 5])
@@ -1145,7 +1153,7 @@ class Network(object):
 
     # handle most of the regularizers here
     weights_regularizer \
-      = tf.contrib.layers.l2_regularizer(cfg.TRAIN.WEIGHT_DECAY)
+      = tf.keras.regularizers.L2(cfg.TRAIN.WEIGHT_DECAY)
     if cfg.TRAIN.BIAS_DECAY:
       biases_regularizer = weights_regularizer
     else:

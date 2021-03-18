@@ -7,10 +7,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
-import tensorflow.contrib.slim as slim
-from tensorflow.contrib.slim import losses
-from tensorflow.contrib.slim import arg_scope
+# import tensorflow as tf
+# import tensorflow as tf2
+import tensorflow.compat.v1 as tf
+import tf_slim as slim
+from tf_slim import losses
+from tf_slim import arg_scope
 import numpy as np
 
 from nets.network import Network

@@ -12,8 +12,10 @@ from time import sleep
 
 from skimage.transform import resize as resize
 
-from scipy.misc import imsave as imsave
-from scipy.misc import imread as imread
+#from scipy.misc import imsave as imsave
+#from scipy.misc import imread as imread
+from imageio import imwrite as imsave
+from imageio import imread as imread
 from scipy.spatial.distance import cdist as cdist
 
 import matplotlib.pyplot as plt
@@ -144,7 +146,7 @@ def init_rl_variables(sess):
     try:
       sess.run(var)
     except tf.errors.FailedPreconditionError:
-      print var
+      print(var)
       uninitialized_vars.append(var)
   if len(uninitialized_vars) == 0:
     print("\nNo variables needed initialization (all were instead loaded!)\n")
@@ -216,7 +218,7 @@ def do_hist_update(rl_input, cls_probs_uptonow, pred_bboxes_uptonow, keeps,
   if not rl_in_upsamp_height is None:
     for curr_bin_assignment in range(nms_prod):
       ctr_height = curr_bin_assignment % cfg.DRL_RPN.H_HIST
-      ctr_width = curr_bin_assignment / cfg.DRL_RPN.W_HIST
+      ctr_width = curr_bin_assignment // cfg.DRL_RPN.W_HIST
       rl_hist_hstart = ctr_height * rl_in_upsamp_height
       rl_hist_hend = min((ctr_height + 1) * rl_in_upsamp_height, height)
       rl_hist_wstart = ctr_width * rl_in_upsamp_width

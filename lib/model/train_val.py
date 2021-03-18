@@ -20,8 +20,9 @@ import glob
 import time
 from time import sleep
 
-import tensorflow as tf
-from tensorflow.python import pywrap_tensorflow
+import tensorflow as tf2
+import tensorflow.compat.v1 as tf
+# from tensorflow.python import pywrap_tensorflow
 
 from model.config import cfg, cfg_from_list
 import roi_data_layer.roidb as rdl_roidb
@@ -108,7 +109,7 @@ class SolverWrapper(object):
 
   def get_variables_in_checkpoint_file(self, file_name):
     try:
-      reader = pywrap_tensorflow.NewCheckpointReader(file_name)
+      reader = tf.train.NewCheckpointReader(file_name)
       var_to_shape_map = reader.get_variable_to_shape_map()
       return var_to_shape_map 
     except Exception as e:  # pylint: disable=broad-except

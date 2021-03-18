@@ -18,7 +18,9 @@ import pprint
 import time, os, sys
 from time import sleep
 
-import tensorflow as tf
+# import tensorflow as tf
+# import tensorflow as tf2
+import tensorflow.compat.v1 as tf
 from nets.vgg16 import vgg16
 
 def parse_args():
