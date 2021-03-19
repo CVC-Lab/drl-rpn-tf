@@ -22,6 +22,7 @@ from time import sleep
 
 import tensorflow as tf2
 import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 # from tensorflow.python import pywrap_tensorflow
 
 from model.config import cfg, cfg_from_list
